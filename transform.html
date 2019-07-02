@@ -1,0 +1,119 @@
+<html>
+<head>
+<title>Transform paragraph format</title>
+<script src="https://code.jquery.com/jquery-3.0.0.js"></script>
+<script src="https://code.jquery.com/jquery-migrate-3.1.0.js"></script>
+<script>
+function changeText() { 
+   var input = document.getElementById("input_txt").value;
+   var output = input.replace(/[\r\n]/g,"");
+   var type = document.getElementById("translation_type").value;
+   var fromLanguage = "en";
+   var toLanguage = "zh-CN";
+   // 处理跨域请求得到的数据
+   if(type == "google"){
+      var url = "https://translate.google.cn/translate_a/single?"
+	  +"client=webapp&sl="+fromLanguage+"&tl="+toLanguage+"&hl=zh-CN"+"&dt=at&dt=bd&dt=ex&dt=ld&dt=md&dt=gca&dt=rw"
+	  +"&dt=rm&dt=ss&dt=t&ie=UTF-8&oe=UTF-8&source=bh&ssel=0&tsel=0&kc=1&tk="+token(output)+"&q="+encodeURIComponent(output);
+	  document.getElementById("output_txt").value = url;
+	  //loadXMLDoc(url);
+	  $.getJSON(url,function( data ){
+		//document.getElementById("output_txt").value = data;
+	  });
+   }else if(type == "yudao"){
+	 document.getElementById("output_txt").value =type;
+   }
+   else if(type == "baidu"){
+     document.getElementById("output_txt").value =type;
+   }
+}
+
+function loadXMLDoc(url)
+{
+	var xmlhttp;
+	if (window.XMLHttpRequest)
+	{// code for IE7+, Firefox, Chrome, Opera, Safari
+	  xmlhttp=new XMLHttpRequest();
+	}
+	else
+	{// code for IE6, IE5
+	  xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+	}
+	xmlhttp.onreadystatechange=function()
+	{
+	  if (xmlhttp.readyState==4 && xmlhttp.status==200)
+	  {
+		 document.getElementById("output_txt").value=xmlhttp.responseText;
+	  }else{
+		 document.getElementById("output_txt").value = "Translation failed !!!";
+	  }
+	}
+	xmlhttp.open("GET",url,true);
+	//xmlhttp.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+	xmlhttp.send();
+}
+
+function token(a) { //google token
+    var k = "";
+    var b = 406644;
+    var b1 = 3293161072;
+ 
+    var jd = ".";
+    var sb = "+-a^+6";
+    var Zb = "+-3^+b+-f";
+ 
+    for (var e = [], f = 0, g = 0; g < a.length; g++) {
+        var m = a.charCodeAt(g);
+        128 > m ? e[f++] = m: (2048 > m ? e[f++] = m >> 6 | 192 : (55296 == (m & 64512) && g + 1 < a.length && 56320 == (a.charCodeAt(g + 1) & 64512) ? (m = 65536 + ((m & 1023) << 10) + (a.charCodeAt(++g) & 1023), e[f++] = m >> 18 | 240, e[f++] = m >> 12 & 63 | 128) : e[f++] = m >> 12 | 224, e[f++] = m >> 6 & 63 | 128), e[f++] = m & 63 | 128)
+    }
+    a = b;
+    for (f = 0; f < e.length; f++) a += e[f],
+    a = RL(a, sb);
+    a = RL(a, Zb);
+    a ^= b1 || 0;
+    0 > a && (a = (a & 2147483647) + 2147483648);
+    a %= 1E6;
+    return a.toString() + jd + (a ^ b)
+};
+ 
+function RL(a, b) { // google
+    var t = "a";
+    var Yb = "+";
+    for (var c = 0; c < b.length - 2; c += 3) {
+        var d = b.charAt(c + 2),
+        d = d >= t ? d.charCodeAt(0) - 87 : Number(d),
+        d = b.charAt(c + 1) == Yb ? a >>> d: a << d;
+        a = b.charAt(c) == Yb ? a + d & 4294967295 : a ^ d
+    }
+    return a
+}
+</script>
+</head>
+<body>
+
+<div>
+<h1>original paragraph</h1>
+<textarea id="input_txt" rows="20" cols="100">
+</textarea>
+</div>
+
+<div>
+<label>Translation interface:</label>
+<select id="translation_type">
+  <option value ="google">Google translation</option>
+  <option value ="yudao">Youdao translation</option>
+  <option value="baidu">Baidu translation</option>
+</select>
+<button  type="button" onclick="changeText()" >transform</button>
+</div>
+
+<div>
+<h1>output paragraph</h1>
+<textarea id="output_txt" rows="20" cols="100">
+</textarea>
+
+</div>
+
+</body>
+
+</html>
