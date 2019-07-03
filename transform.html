@@ -27,15 +27,13 @@ function changeText() {
 		}
 		document.getElementById("output_txt").value = transformResult;
 	  });
-   }else if(type == "yudao"){
-	 document.getElementById("output_txt").value =type;
    }
    else if(type == "baidu"){
      document.getElementById("output_txt").value =type;
    }
 }
 
-function loadXMLDoc(url)
+function loadXMLDoc(url,params)
 {
 	var xmlhttp;
 	if (window.XMLHttpRequest)
@@ -55,9 +53,9 @@ function loadXMLDoc(url)
 		 document.getElementById("output_txt").value = "Translation failed !!!";
 	  }
 	}
-	xmlhttp.open("GET",url,true);
+	xmlhttp.open("POST",url,true);
 	//xmlhttp.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
-	xmlhttp.send();
+	xmlhttp.send(params);
 }
 
 function token(a) { //google token
@@ -108,8 +106,7 @@ function RL(a, b) { // google
 <label>Translation interface:</label>
 <select id="translation_type">
   <option value ="google">Google translation</option>
-  <option value ="yudao">Youdao translation</option>
-  <option value="baidu">Baidu translation</option>
+  <!--<option value="baidu">Baidu translation</option>-->
 </select>
 <button  type="button" onclick="changeText()" >transform</button>
 </div>
