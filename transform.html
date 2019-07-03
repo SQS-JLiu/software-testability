@@ -10,15 +10,22 @@ function changeText() {
    var type = document.getElementById("translation_type").value;
    var fromLanguage = "en";
    var toLanguage = "zh-CN";
+   var transformResult = "";
    // 处理跨域请求得到的数据
    if(type == "google"){
-      var url = "https://translate.google.cn/translate_a/single?"
-	  +"client=webapp&sl="+fromLanguage+"&tl="+toLanguage+"&hl=zh-CN"+"&dt=at&dt=bd&dt=ex&dt=ld&dt=md&dt=gca&dt=rw"
-	  +"&dt=rm&dt=ss&dt=t&ie=UTF-8&oe=UTF-8&source=bh&ssel=0&tsel=0&kc=1&tk="+token(output)+"&q="+encodeURIComponent(output);
-	  document.getElementById("output_txt").value = url;
+      //var url = "https://translate.google.cn/translate_a/single?"
+	  //+"client=webapp&sl="+fromLanguage+"&tl="+toLanguage+"&hl=zh-CN"+"&dt=at&dt=bd&dt=ex&dt=ld&dt=md&dt=gca&dt=rw"
+	  //+"&dt=rm&dt=ss&dt=t&ie=UTF-8&oe=UTF-8&source=bh&ssel=0&tsel=0&kc=1&tk="+token(output)+"&q="+encodeURIComponent(output);
+	  var url = "http://translate.google.cn/translate_a/single?client=gtx&sl="+fromLanguage+"&tl="+toLanguage+"&dt=t&q="+encodeURIComponent(output);
+	  //document.getElementById("output_txt").value = url;
 	  //loadXMLDoc(url);
 	  $.getJSON(url,function( data ){
-		//document.getElementById("output_txt").value = data;
+	    if(data==null) return;
+		res = data[0];
+		for(var index in data[0]){
+			transformResult = transformResult+res[index][0];
+		}
+		document.getElementById("output_txt").value = transformResult;
 	  });
    }else if(type == "yudao"){
 	 document.getElementById("output_txt").value =type;
