@@ -6,7 +6,7 @@
 <script>
 function changeText() { 
    var input = document.getElementById("input_txt").value;
-   var output = input.replace(/[\r\n]/g,"");
+   var output = input.replace(/[\r\n]/g," ");
    var type = document.getElementById("translation_type").value;
    var fromLanguage = "en";
    var toLanguage = "zh-CN";
